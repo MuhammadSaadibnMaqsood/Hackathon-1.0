@@ -21,7 +21,7 @@ const TrustSection = () => {
         },
       });
     }
-  });
+  },[]);
   return (
     <div className="py-16 md:py-24 px-4 ">
       <div className="max-w-6xl mx-auto">
@@ -33,6 +33,7 @@ const TrustSection = () => {
           ref={TrustCardsRef}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12"
         >
+         
           <TrustCard
             title="Our Beneficiaries, Our Heroes"
             imageUrl="https://indushospital.org.pk/wp-content/uploads/2025/03/Maham-Story-Thumbnail.jpg"
@@ -57,12 +58,12 @@ const TrustSection = () => {
               <img
                 src="https://indushospital.org.pk/wp-content/uploads/2023/12/AABB-1.jpg"
                 alt="AABB Accreditation Logo"
-                className="w-3/4 max-w-[150px] h-auto object-contain"
+                className="w-3/4 max-w-[250px] h-auto object-contain"
               />
               <img
                 src="https://indushospital.org.pk/wp-content/uploads/2023/12/CAP-1-1.jpg"
                 alt="CAP Accreditation Logo"
-                className="w-3/4 max-w-[150px] h-auto object-contain"
+                className="w-3/4 max-w-[250px] h-auto object-contain"
               />
             </div>
           </div>

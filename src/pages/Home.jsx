@@ -28,7 +28,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-zinc-100">
+    <div className="bg-zinc-100 pageTransition">
       <Hero />
       <div ref={statsRef}>
         <Stats />

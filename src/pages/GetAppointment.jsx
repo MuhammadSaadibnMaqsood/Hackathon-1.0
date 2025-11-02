@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAppoint, getDoctor } from "../config/supabase";
+import { getAppoint, getDoctor, getSession } from "../config/supabase";
 import { Search, Clock, Calendar, ChevronDown, User } from "lucide-react";
 
 const GetAppointment = () => {
@@ -146,11 +146,16 @@ const GetAppointment = () => {
       return
     }
 
-    await getAppoint(DoctorName, date, timing);
+    const user = await getSession();
+
+    console.log(user?.session?.user?.email);
+    
+
+    await getAppoint(DoctorName, date, timing, user.session.user.email );
   }
 
   return (
-    <div className="pt-24 md:pt-32 px-4 md:px-8 max-w-7xl mx-auto min-h-screen bg-zinc-100 font-sans">
+    <div className="pt-24 pageTransition md:pt-32 px-4 md:px-8 max-w-7xl mx-auto min-h-screen bg-zinc-100 font-sans">
       <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-2">
         Book an Appointment
       </h1>

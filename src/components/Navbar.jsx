@@ -35,7 +35,7 @@ const Navbar = ({ user }) => {
     });
   }, [isNavVisible]);
 
-  const navItems = ["Get Appointment", "My Appointment", "About", "Contact"];
+  const navItems = ["Get Appointment", "My Appointment", "About"];
 
   const toggleMobileNav = () => {
     if (mobileNav) {

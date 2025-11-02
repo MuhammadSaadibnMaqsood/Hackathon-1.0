@@ -20,12 +20,13 @@ export const getDoctor = async () => {
   return data;
 };
 
-export const getAppoint = async (doctorName, date, time) => {
+export const getAppoint = async (doctorName, date, time, email) => {
   try {
     const { data, error } = await supabaseCl.from("Appointments").insert({
       DrName: doctorName,
       time: time,
       Date: date,
+      PatientEmail: email,
     });
     alert("Appointted");
     if (data) {
@@ -44,11 +45,11 @@ export const getAppointments = async (email) => {
     .select()
     .eq("PatientEmail", email);
 
-  console.log(data);
-
   if (error) {
     console.log(error);
+    return;
   }
+  return data;
 };
 
 export const getSession = async () => {
