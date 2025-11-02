@@ -62,8 +62,19 @@ export const getSession = async () => {
   } catch (error) {}
 };
 
-export const getLogin = async (email, password) => {
+export const getSignup = async (email, password) => {
   const { data, error } = await supabaseCl.auth.signUp({
+    email: email,
+    password: password,
+  });
+  if (error) {
+    console.log(error);
+    return;
+  }
+  window.location.href = "/";
+};
+export const getLogin = async (email, password) => {
+  const { data, error } = await supabaseCl.auth.signInWithPassword({
     email: email,
     password: password,
   });
@@ -77,5 +88,7 @@ export const logout = async () => {
   const { error } = await supabaseCl.auth.signOut();
   if (error) {
     console.log(error);
+    return;
   }
+  window.location.href = "/";
 };

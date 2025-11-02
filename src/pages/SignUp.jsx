@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getLogin } from "../config/supabase";
+import { getSignup } from "../config/supabase";
 
 const SignUp = () => {
   const [data, setData] = useState({
@@ -9,7 +9,7 @@ const SignUp = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    await getLogin(data.email, data.password);
+    await getSignup(data.email, data.password);
   }
   return (
     <div className=" pageTransition pt-28 bg-gray-100 flex items-center justify-center p-4">

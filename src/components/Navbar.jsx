@@ -3,9 +3,9 @@ import { RxCross1 } from "react-icons/rx";
 import { useWindowScroll } from "react-use";
 import gsap from "gsap";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { logout } from "../config/supabase";
 
-const Navbar = () => {
+const Navbar = ({ user }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [mobileNav, setMobileNav] = useState(false);
@@ -48,6 +48,9 @@ const Navbar = () => {
     }
   };
 
+  async function handleLogout() {
+    await logout();
+  }
   return (
     <div
       ref={navContainerRef}
@@ -57,24 +60,46 @@ const Navbar = () => {
         <nav className="flex h-16 w-full items-center justify-between rounded-full bg-white/50 px-6 py-2 shadow-xl backdrop-blur-md">
           {/* LEFT SIDE */}
           <div className="flex items-center gap-7">
-          
-              <img className="w-10 rounded-full" src="/Logo.png" alt="logo" />
-      
+            <img className="w-10 rounded-full" src="/Logo.png" alt="logo" />
+
             <a href="/">NEXUS HEALTH</a>
           </div>
 
           {/* RIGHT SIDE */}
           <div className="flex h-full items-center">
             <div className="hidden md:flex items-center space-x-2">
-              {navItems.map((item) => (
-                <a
-                  className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                  key={item}
-                  href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+              {user?.session
+                ? navItems.map((item) => (
+                    <a
+                      className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                      key={item}
+                      href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+                    >
+                      {item}
+                    </a>
+                  ))
+                : navItems.splice(2, 3).map((item) => (
+                    <a
+                      className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
+                      key={item}
+                      href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+                    >
+                      {item}
+                    </a>
+                  ))}
+
+              {user?.session ? (
+                <button
+                  onClick={handleLogout}
+                  className="px-5 py-2 cursor-pointer rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
                 >
-                  {item}
-                </a>
-              ))}
+                  Logout
+                </button>
+              ) : (
+                <button onClick={()=> window.location.href = '/login'} className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition">
+                  Login
+                </button>
+              )}
             </div>
 
             <div className="flex md:hidden">
@@ -109,6 +134,16 @@ const Navbar = () => {
               {item}
             </a>
           ))}
+
+          {user ? (
+            <button className="px-5 py-2 cursor-pointer rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition">
+              Logout
+            </button>
+          ) : (
+            <button className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition">
+              Login
+            </button>
+          )}
         </div>
       )}
     </div>
