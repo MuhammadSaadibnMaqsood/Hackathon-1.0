@@ -3,6 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { useWindowScroll } from "react-use";
 import gsap from "gsap";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -56,8 +57,10 @@ const Navbar = () => {
         <nav className="flex h-16 w-full items-center justify-between rounded-full bg-white/50 px-6 py-2 shadow-xl backdrop-blur-md">
           {/* LEFT SIDE */}
           <div className="flex items-center gap-7">
-            <img className="w-10 rounded-full" src="/Logo.png" alt="logo" />
-            <h1>NEXUS HEALTH</h1>
+          
+              <img className="w-10 rounded-full" src="/Logo.png" alt="logo" />
+      
+            <a href="/">NEXUS HEALTH</a>
           </div>
 
           {/* RIGHT SIDE */}
@@ -67,7 +70,7 @@ const Navbar = () => {
                 <a
                   className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
                   key={item}
-                  href={`#${item.replace(/\s+/g, "").toLowerCase()}`}
+                  href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
                 >
                   {item}
                 </a>
@@ -100,7 +103,7 @@ const Navbar = () => {
             <a
               className="px-3 py-2 text-lg font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
               key={item}
-              href={`#${item.replace(/\s+/g, "").toLowerCase()}`}
+              href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
               onClick={toggleMobileNav}
             >
               {item}
