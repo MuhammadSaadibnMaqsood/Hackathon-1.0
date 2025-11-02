@@ -11,7 +11,7 @@ const imgArr = [
 
 const About = () => {
   return (
-    <section className="bg-zinc-100 py-16 md:py-24 px-6">
+    <section className="bg-zinc-100 pageTransition py-16 md:py-24 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Logo and Text */}
         <div className="flex-1 text-center md:text-left">

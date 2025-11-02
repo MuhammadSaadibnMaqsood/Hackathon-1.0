@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAppoint, getDoctor, getSession } from "../config/supabase";
 import { Search, Clock, Calendar, ChevronDown, User } from "lucide-react";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const GetAppointment = () => {
   const [doctors, setDoctors] = useState([]);
@@ -120,9 +122,7 @@ const GetAppointment = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-lg text-blue-600">Loading doctor data...</p>
-      </div>
+      <Loader/>
     );
   }
 
@@ -138,20 +138,20 @@ const GetAppointment = () => {
     const { date, timing } = inputs;
 
     if (!date) {
-      alert("Enter date first");
-      return
+      toast.error("Enter date first");
+      return;
     }
     if (!timing) {
-      alert("Enter Timing first");
-      return
+      toast.error("Enter Timing first");
+      return;
     }
 
     const user = await getSession();
 
     console.log(user?.session?.user?.email);
-    
 
-    await getAppoint(DoctorName, date, timing, user.session.user.email );
+    await getAppoint(DoctorName, date, timing, user.session.user.email);
+    
   }
 
   return (
@@ -272,7 +272,7 @@ const GetAppointment = () => {
                     </span>
                   </p>
                   <button
-                    onClick={()=>getAppointed(dr.DoctorName)}
+                    onClick={() => getAppointed(dr.DoctorName)}
                     className="w-full cursor-pointer bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg transition-colors shadow-md"
                   >
                     Get Appointment

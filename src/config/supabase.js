@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { toast } from "react-toastify";
 
 const supabaseURL = "https://lfqwyidepuvnejvliyjj.supabase.co";
 const supabaseAnonKey =
@@ -28,12 +29,7 @@ export const getAppoint = async (doctorName, date, time, email) => {
       Date: date,
       PatientEmail: email,
     });
-    alert("Appointted");
-    if (data) {
-      console.log(data);
-    } else {
-      console.log(error);
-    }
+    toast.success("Appointment confirm");
   } catch (error) {
     console.log(error);
   }
@@ -49,7 +45,21 @@ export const getAppointments = async (email) => {
     console.log(error);
     return;
   }
-  return data;
+  return data.reverse();
+};
+export const cancelApp = async (id) => {
+  const { data, error } = await supabaseCl
+    .from("Appointments")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+  
+
+  // return data.reverse();
 };
 
 export const getSession = async () => {
@@ -72,6 +82,7 @@ export const getSignup = async (email, password) => {
     console.log(error);
     return;
   }
+  toast.success("Sign Up successfully");
   window.location.href = "/";
 };
 export const getLogin = async (email, password) => {
@@ -83,6 +94,7 @@ export const getLogin = async (email, password) => {
     console.log(error);
     return;
   }
+  toast.success("Login successfully");
   window.location.href = "/";
 };
 export const logout = async () => {
@@ -91,5 +103,7 @@ export const logout = async () => {
     console.log(error);
     return;
   }
+  toast.success("Logout successfully");
+
   window.location.href = "/";
 };

@@ -1,14 +1,38 @@
 import { useState } from "react";
 import { getSignup } from "../config/supabase";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [data, setData] = useState({
     email: "",
     password: "",
+    confirmPass: "",
   });
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!data.email.trim()) {
+      toast.error("Email missing");
+      return;
+    }
+    if (!data.password.trim()) {
+      toast.error("password missing");
+      return;
+    }
+    if (!data.confirmPass.trim()) {
+      toast.error("Confirm password missing");
+      return;
+    }
+
+    if (data.password !== data.confirmPass) {
+      toast.error("Password mismatch");
+      return;
+    }
+    if (data.password.length < 6) {
+      toast.error("Password must be atleast 6 character long");
+      return;
+    }
+
     await getSignup(data.email, data.password);
   }
   return (
@@ -27,7 +51,7 @@ const SignUp = () => {
         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-extrabold text-blue-800 mb-2">
-              Welcome to <span className="text-teal-600">NUXUS</span>
+              Sign Up to <span className="text-teal-600">NUXUS</span>
             </h1>
           </div>
 
@@ -41,6 +65,7 @@ const SignUp = () => {
                 Email Address
               </label>
               <input
+                required
                 onChange={(e) =>
                   setData((prev) => ({ ...prev, email: e.target.value }))
                 }
@@ -62,12 +87,35 @@ const SignUp = () => {
                 Password
               </label>
               <input
+                required
                 onChange={(e) =>
                   setData((prev) => ({ ...prev, password: e.target.value }))
                 }
                 type="password"
                 id="password"
                 value={data.password}
+                name="password"
+                placeholder="••••••••"
+                className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              />
+            </div>
+
+            {/* CONFIRM PASS  */}
+            <div>
+              <label
+                htmlFor="Confirm password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Confirm Password
+              </label>
+              <input
+                required
+                onChange={(e) =>
+                  setData((prev) => ({ ...prev, confirmPass: e.target.value }))
+                }
+                type="password"
+                id="password"
+                value={data.confirmPass}
                 name="password"
                 placeholder="••••••••"
                 className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"

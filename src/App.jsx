@@ -1,5 +1,7 @@
 import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import GetAppointment from "./pages/GetAppointment";
@@ -38,6 +40,12 @@ function App() {
         <Route path="/about" element={<About />} />
       </Routes>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

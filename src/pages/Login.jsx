@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getLogin } from "../config/supabase";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -10,10 +11,10 @@ const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!data.email.trim()) {
-      alert("Dont be so smart");
+      toast.error("Dont be so smart");
     }
     if (!data.password.trim()) {
-      alert("Dont be so smart");
+      toast.error("Dont be so smart");
     }
     await getLogin(data.email, data.password);
   }

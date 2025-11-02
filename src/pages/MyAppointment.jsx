@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { getAppointments, getSession } from "../config/supabase";
+import { cancelApp, getAppointments, getSession } from "../config/supabase";
 import { CalendarDays, Clock, User, Stethoscope } from "lucide-react";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const MyAppointment = () => {
   const [appointments, setAppointments] = useState([]);
+  const [loading, setloading] = useState(true);
 
   useEffect(() => {
     getAppointmentsFunc();
   }, []);
 
   async function getAppointmentsFunc() {
-    const user = await getSession();
-    const appointment = await getAppointments(user?.session?.user?.email);
-    setAppointments(appointment || []);
+    try {
+      const user = await getSession();
+      const appointment = await getAppointments(user?.session?.user?.email);
+      setAppointments(appointment || []);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setloading(false);
+    }
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
+  async function cancelAppointment(id) {
+    await cancelApp(id);
+    getAppointmentsFunc();
+    toast.success("Appointment cancelled");
   }
 
   return (
@@ -33,7 +51,7 @@ const MyAppointment = () => {
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {appointments.map((appt, index) => (
+          {appointments.reverse().map((appt, index) => (
             <div
               key={index}
               className="bg-white p-6 rounded-2xl shadow-md border border-blue-100 hover:shadow-xl transition"
@@ -42,9 +60,8 @@ const MyAppointment = () => {
                 <User className="w-10 h-10 text-blue-500 bg-blue-100 p-2 rounded-full" />
                 <div>
                   <h2 className="text-lg font-semibold text-gray-800">
-                   {appt.DrName || "Unknown"}
+                    {appt.DrName || "Unknown"}
                   </h2>
-                
                 </div>
               </div>
 
@@ -58,8 +75,12 @@ const MyAppointment = () => {
                   <span>{appt.time}</span>
                 </div>
               </div>
-
-             
+              <button
+                onClick={() => cancelAppointment(appt.id)}
+                className="w-full mt-5 cursor-pointer bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg transition-colors shadow-md"
+              >
+                Cancel Appointment
+              </button>
             </div>
           ))}
         </div>
