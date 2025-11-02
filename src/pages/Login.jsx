@@ -34,7 +34,7 @@ const Login = () => {
         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-extrabold text-blue-800 mb-2">
-              Welcome back to <span className="text-teal-600">NUXUS</span>
+              Welcome back to <span className="text-teal-600">NEXUS</span>
             </h1>
           </div>
 

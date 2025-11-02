@@ -15,6 +15,10 @@ const SignUp = () => {
       toast.error("Email missing");
       return;
     }
+    if (!data.email.includes("@gmail.com")) {
+      toast.error("Email missing");
+      return;
+    }
     if (!data.password.trim()) {
       toast.error("password missing");
       return;
@@ -51,7 +55,7 @@ const SignUp = () => {
         <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-extrabold text-blue-800 mb-2">
-              Sign Up to <span className="text-teal-600">NUXUS</span>
+              Sign Up to <span className="text-teal-600">NEXUS</span>
             </h1>
           </div>
 
