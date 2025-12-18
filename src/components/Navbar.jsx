@@ -4,6 +4,7 @@ import { useWindowScroll } from "react-use";
 import gsap from "gsap";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { logout } from "../config/supabase";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ user }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -62,7 +63,7 @@ const Navbar = ({ user }) => {
           <div className="flex items-center gap-7">
             <img className="w-10 rounded-full" src="/Logo.png" alt="logo" />
 
-            <a href="/">NEXUS HEALTH</a>
+            <Link to="/">NEXUS HEALTH</Link>
           </div>
 
           {/* RIGHT SIDE */}
@@ -70,22 +71,22 @@ const Navbar = ({ user }) => {
             <div className="hidden md:flex items-center space-x-2">
               {user?.session
                 ? navItems.map((item) => (
-                    <a
+                    <Link
                       className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
                       key={item}
-                      href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+                      to={`/${item.replace(/\s+/g, "").toLowerCase()}`}
                     >
                       {item}
-                    </a>
+                    </Link>
                   ))
                 : navItems.splice(2, 3).map((item) => (
-                    <a
+                    <Link
                       className="px-3 py-2 text-sm font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
                       key={item}
-                      href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+                      to={`/${item.replace(/\s+/g, "").toLowerCase()}`}
                     >
                       {item}
-                    </a>
+                    </Link>
                   ))}
 
               {user?.session ? (
@@ -96,9 +97,12 @@ const Navbar = ({ user }) => {
                   Logout
                 </button>
               ) : (
-                <button onClick={()=> window.location.href = '/login'} className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition">
+                <Link
+                  to={"/login"}
+                  className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+                >
                   Login
-                </button>
+                </Link>
               )}
             </div>
 
@@ -125,24 +129,30 @@ const Navbar = ({ user }) => {
           className={`${animationClass} fixed top-0 left-0 z-40 flex flex-col items-center justify-center gap-10 min-h-screen w-80 bg-white shadow-2xl`}
         >
           {navItems.map((item) => (
-            <a
+            <Link
               className="px-3 py-2 text-lg font-medium text-gray-700 rounded-full hover:bg-gray-100 transition-colors duration-200"
               key={item}
-              href={`/${item.replace(/\s+/g, "").toLowerCase()}`}
+              to={`/${item.replace(/\s+/g, "").toLowerCase()}`}
               onClick={toggleMobileNav}
             >
               {item}
-            </a>
+            </Link>
           ))}
 
-          {user ? (
-            <button className="px-5 py-2 cursor-pointer rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition">
+          {user?.session ? (
+            <button
+              onClick={handleLogout}
+              className="px-5 py-2 cursor-pointer rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
+            >
               Logout
             </button>
           ) : (
-            <button className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition">
+            <Link
+              to={"/login"}
+              className="px-5 cursor-pointer py-2 rounded-full bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+            >
               Login
-            </button>
+            </Link>
           )}
         </div>
       )}

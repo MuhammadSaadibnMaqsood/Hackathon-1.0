@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getAppoint, getDoctor, getSession } from "../config/supabase";
+import {
+  getAllOppointments,
+  getAppoint,
+  getDoctor,
+  getSession,
+} from "../config/supabase";
 import { Search, Clock, Calendar, ChevronDown, User } from "lucide-react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
@@ -14,6 +19,14 @@ const GetAppointment = () => {
   });
   const [filteredDr, setFilteredDr] = useState([]);
   const [showResults, setShowResults] = useState(false);
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   const dayNames = [
     "Sunday",
@@ -121,9 +134,7 @@ const GetAppointment = () => {
   }, [inputs, doctors, loading]);
 
   if (loading) {
-    return (
-      <Loader/>
-    );
+    return <Loader />;
   }
 
   let currentDay = "";
@@ -148,10 +159,23 @@ const GetAppointment = () => {
 
     const user = await getSession();
 
-    console.log(user?.session?.user?.email);
+    const data = await getAllOppointments(DoctorName, date);
+
+    if (data.length >= 20) {
+      toast.error("No More appointments today");
+      return;
+    }
+
+    const isBooked = data.some((appointment) => {
+      const dbTime = appointment.time.substring(0, 5);
+      return dbTime === timing;
+    });
+    if (isBooked) {
+      toast.error("Time slot already booked");
+      return;
+    }
 
     await getAppoint(DoctorName, date, timing, user.session.user.email);
-    
   }
 
   return (
@@ -180,6 +204,7 @@ const GetAppointment = () => {
               name="date"
               onChange={handleInputChange}
               value={inputs.date}
+              min={getTodayDate()} // Add this line
               className="w-full p-3 border cursor-pointer border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>

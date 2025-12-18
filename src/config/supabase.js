@@ -35,6 +35,21 @@ export const getAppoint = async (doctorName, date, time, email) => {
   }
 };
 
+export const getAllOppointments = async (doctorName, date) => {
+  const { data, error } = await supabaseCl
+    .from("Appointments")
+    .select("*")
+    .eq("DrName", doctorName) 
+    .eq("Date", date); 
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  console.log(data);
+  return data;
+};
 export const getAppointments = async (email) => {
   const { data, error } = await supabaseCl
     .from("Appointments")
@@ -57,9 +72,6 @@ export const cancelApp = async (id) => {
     console.log(error);
     return;
   }
-  
-
-  // return data.reverse();
 };
 
 export const getSession = async () => {
@@ -92,6 +104,7 @@ export const getLogin = async (email, password) => {
   });
   if (error) {
     console.log(error);
+    toast.error(error.message);
     return;
   }
   toast.success("Login successfully");

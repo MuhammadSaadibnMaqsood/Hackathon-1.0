@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getLogin } from "../config/supabase";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -100,12 +101,12 @@ const Login = () => {
           {/* Optional: Sign Up Link */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Don't have an account?{" "}
-            <a
-              href="/signup"
+            <Link
+              to="/signup"
               className="font-medium text-teal-600 hover:text-teal-700"
             >
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
       </div>
