@@ -1,11 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
 import { toast } from "react-toastify";
+import { supabaseCl } from "./supabaseClient";
 
-const supabaseURL = "https://lfqwyidepuvnejvliyjj.supabase.co";
-const supabaseAnonKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmcXd5aWRlcHV2bmVqdmxpeWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIwMDUyNjIsImV4cCI6MjA3NzU4MTI2Mn0.TG9MKksRb0mFu0hIqlwixt9wl_Prbgu_0JM6ZGQVvgA";
-
-const supabaseCl = createClient(supabaseURL, supabaseAnonKey);
 
 export const getDoctor = async () => {
   const { data, error } = await supabaseCl.from("Doctors").select("*");
@@ -15,8 +10,6 @@ export const getDoctor = async () => {
 
     return [];
   }
-
-  //   console.log(data);
 
   return data;
 };
@@ -39,8 +32,8 @@ export const getAllOppointments = async (doctorName, date) => {
   const { data, error } = await supabaseCl
     .from("Appointments")
     .select("*")
-    .eq("DrName", doctorName) 
-    .eq("Date", date); 
+    .eq("DrName", doctorName)
+    .eq("Date", date);
 
   if (error) {
     console.log(error);
@@ -103,12 +96,9 @@ export const getLogin = async (email, password) => {
     password: password,
   });
   if (error) {
-    console.log(error);
-    toast.error(error.message);
-    return;
+    return { success: false, message: error.message };
   }
-  toast.success("Login successfully");
-  window.location.href = "/";
+  return { success: true, user: data.user };
 };
 export const logout = async () => {
   const { error } = await supabaseCl.auth.signOut();

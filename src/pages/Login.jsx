@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { getLogin } from "../config/supabase";
+import { getLogin } from "../config/supabasefunctions";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { validateLogin } from "../functions/validation/authvalidation";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -11,13 +12,21 @@ const Login = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!data.email.trim()) {
-      toast.error("Dont be so smart");
+
+    const result = validateLogin(data.email, data.password);
+
+    if (result !== "valid") {
+      toast.error(result);
+      return;
     }
-    if (!data.password.trim()) {
-      toast.error("Dont be so smart");
+    const response = await getLogin(data.email, data.password);
+
+    if (!response?.success) {
+      toast.error(response.message);
     }
-    await getLogin(data.email, data.password);
+
+    toast.success("Login successfully");
+    window.location.href = "/";
   }
   return (
     <div className=" pageTransition pt-28 bg-gray-100 flex items-center justify-center p-4">
