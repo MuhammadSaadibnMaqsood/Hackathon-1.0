@@ -9,8 +9,8 @@ import MyAppointment from "./pages/MyAppointment";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import { useEffect, useState } from "react";
-import { getSession } from "./config/supabase";
 import About from "./pages/About";
+import { getSession } from "./config/supabasefunctions";
 function App() {
   const [user, setUser] = useState([]);
   async function getUser() {

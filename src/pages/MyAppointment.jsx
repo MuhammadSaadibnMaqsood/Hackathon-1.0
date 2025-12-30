@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { cancelApp, getAppointments, getSession } from "../config/supabase";
+import { cancelApp, getAppointments, getSession } from "../config/supabasefunctions";
 import { CalendarDays, Clock, User, Stethoscope } from "lucide-react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { getSignup } from "../config/supabase";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { validateSignup } from "../functions/validation/authvalidation";
+import { getSignup } from "../config/supabasefunctions";
 
 const SignUp = () => {
   const [data, setData] = useState({
@@ -12,33 +13,22 @@ const SignUp = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!data.email.trim()) {
-      toast.error("Email missing");
-      return;
-    }
-    if (!data.email.includes("@gmail.com")) {
-      toast.error("Email missing");
-      return;
-    }
-    if (!data.password.trim()) {
-      toast.error("password missing");
-      return;
-    }
-    if (!data.confirmPass.trim()) {
-      toast.error("Confirm password missing");
+
+    const result = validateSignup(data.email, data.password, data.confirmPass);
+
+    if (result !== "valid") {
+      toast.error(result);
       return;
     }
 
-    if (data.password !== data.confirmPass) {
-      toast.error("Password mismatch");
-      return;
-    }
-    if (data.password.length < 6) {
-      toast.error("Password must be atleast 6 character long");
+    const response = await getSignup(data.email, data.password);
+    if (!response.success) {
+      toast.error(response.message);
       return;
     }
 
-    await getSignup(data.email, data.password);
+    toast.success("Sign Up successfully");
+    window.location.href = "/";
   }
   return (
     <div className=" pageTransition pt-28 bg-gray-100 flex items-center justify-center p-4">

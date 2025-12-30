@@ -3,7 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { useWindowScroll } from "react-use";
 import gsap from "gsap";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { logout } from "../config/supabase";
+import { logout } from "../config/supabasefunctions";
 import { Link } from "react-router-dom";
 
 const Navbar = ({ user }) => {

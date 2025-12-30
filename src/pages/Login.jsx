@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { getLogin } from "../config/supabasefunctions";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { validateLogin } from "../functions/validation/authvalidation";
+import { getLogin } from "../config/supabasefunctions";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -23,6 +23,7 @@ const Login = () => {
 
     if (!response?.success) {
       toast.error(response.message);
+      return;
     }
 
     toast.success("Login successfully");

@@ -84,11 +84,10 @@ export const getSignup = async (email, password) => {
     password: password,
   });
   if (error) {
-    console.log(error);
-    return;
+    return {success:false, message: error.message};
   }
-  toast.success("Sign Up successfully");
-  window.location.href = "/";
+
+  return {success:true,user:data.user}
 };
 export const getLogin = async (email, password) => {
   const { data, error } = await supabaseCl.auth.signInWithPassword({
@@ -100,6 +99,8 @@ export const getLogin = async (email, password) => {
   }
   return { success: true, user: data.user };
 };
+
+
 export const logout = async () => {
   const { error } = await supabaseCl.auth.signOut();
   if (error) {

@@ -4,10 +4,11 @@ import {
   getAppoint,
   getDoctor,
   getSession,
-} from "../config/supabase";
+} from "../config/supabasefunctions";
 import { Search, Clock, Calendar, ChevronDown, User } from "lucide-react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import { getAppointedFunc } from "../functions/getAppointed";
 
 const GetAppointment = () => {
   const [doctors, setDoctors] = useState([]);
@@ -145,37 +146,8 @@ const GetAppointment = () => {
     } catch (e) {}
   }
 
-  async function getAppointed(DoctorName) {
-    const { date, timing } = inputs;
-
-    if (!date) {
-      toast.error("Enter date first");
-      return;
-    }
-    if (!timing) {
-      toast.error("Enter Timing first");
-      return;
-    }
-
-    const user = await getSession();
-
-    const data = await getAllOppointments(DoctorName, date);
-
-    if (data.length >= 20) {
-      toast.error("No More appointments today");
-      return;
-    }
-
-    const isBooked = data.some((appointment) => {
-      const dbTime = appointment.time.substring(0, 5);
-      return dbTime === timing;
-    });
-    if (isBooked) {
-      toast.error("Time slot already booked");
-      return;
-    }
-
-    await getAppoint(DoctorName, date, timing, user.session.user.email);
+  function getAppointed() {
+    getAppointedFunc(DoctorName);
   }
 
   return (
