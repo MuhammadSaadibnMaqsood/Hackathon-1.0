@@ -8,7 +8,12 @@ import {
 import { Search, Clock, Calendar, ChevronDown, User } from "lucide-react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
-import { getAppointedFunc } from "../functions/getAppointed";
+import {
+  applyFiltersLogic,
+  fetchDoctorsLogic,
+  getAppointedFunc,
+  getTodayDate,
+} from "../functions/getAppointmentPage";
 
 const GetAppointment = () => {
   const [doctors, setDoctors] = useState([]);
@@ -20,14 +25,6 @@ const GetAppointment = () => {
   });
   const [filteredDr, setFilteredDr] = useState([]);
   const [showResults, setShowResults] = useState(false);
-
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   const dayNames = [
     "Sunday",
@@ -52,82 +49,25 @@ const GetAppointment = () => {
   }, []);
 
   async function setDoctorsFunc() {
-    try {
-      setLoading(true);
-      const dr = await getDoctor();
-      if (dr && dr.length > 0) {
-        setDoctors(dr);
-      }
-    } catch (error) {
-      console.error("Failed to fetch doctors:", error);
-    } finally {
-      setLoading(false);
-      applyFilters();
-    }
+    setLoading(true);
+
+    const doctorsList = await fetchDoctorsLogic();
+    setDoctors(doctorsList);
+
+    setLoading(false);
+    applyFilters(doctorsList);
   }
 
   const applyFilters = (currentDoctors = doctors) => {
-    const { date, speciality, timing } = inputs;
+    const { filteredDoctors, showResults } = applyFiltersLogic(
+      currentDoctors,
+      inputs,
+      dayNames
+    );
 
-    let selectedDay = "";
-    if (date) {
-      try {
-        const dateObj = new Date(date + "T00:00:00");
-
-        selectedDay = dayNames[dateObj.getDay()];
-      } catch (e) {
-        console.error("Invalid date selected", e);
-      }
-    }
-
-    if (!date && !speciality && !timing) {
-      setFilteredDr(currentDoctors);
-      setShowResults(false);
-      return;
-    }
-
-    setShowResults(true);
-
-    const results = currentDoctors.filter((dr) => {
-      let matchesDay = true;
-      let matchesSpeciality = true;
-      let matchesTiming = true;
-
-      if (selectedDay) {
-        const workingDaysArray = dr.workingDays
-          ? dr.workingDays.split(",").map((d) => d.trim())
-          : [];
-        matchesDay = workingDaysArray.includes(selectedDay);
-      }
-
-      if (speciality) {
-        matchesSpeciality = dr.specialist === speciality;
-      }
-
-      if (timing) {
-        const [inputHour, inputMinute] = timing.split(":").map(Number);
-        const inputMinutes = inputHour * 60 + inputMinute;
-
-        const [startHour] = (dr["shift-start"] || "00:00:00")
-          .split(":")
-          .map(Number);
-        const [endHour] = (dr["shift-end"] || "23:59:59")
-          .split(":")
-          .map(Number);
-
-        const startMinutes = startHour * 60;
-        const endMinutes = endHour * 60;
-
-        matchesTiming =
-          inputMinutes >= startMinutes && inputMinutes < endMinutes;
-      }
-
-      return matchesDay && matchesSpeciality && matchesTiming;
-    });
-
-    setFilteredDr(results);
+    setFilteredDr(filteredDoctors);
+    setShowResults(showResults);
   };
-
   useEffect(() => {
     if (!loading) {
       applyFilters();
@@ -146,8 +86,8 @@ const GetAppointment = () => {
     } catch (e) {}
   }
 
-  function getAppointed() {
-    getAppointedFunc(DoctorName);
+  function getAppointed(doctorName) {
+    getAppointedFunc(doctorName, inputs);
   }
 
   return (
