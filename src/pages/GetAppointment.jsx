@@ -22,6 +22,7 @@ const GetAppointment = () => {
     date: "",
     speciality: "",
     timing: "",
+    note: "",
   });
   const [filteredDr, setFilteredDr] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -88,6 +89,7 @@ const GetAppointment = () => {
 
   function getAppointed(doctorName) {
     getAppointedFunc(doctorName, inputs);
+    setInputs((prev) => ({ ...prev, note: "" }));
   }
 
   return (
@@ -208,9 +210,28 @@ const GetAppointment = () => {
                       {dr["shift-end"].substring(0, 5)}
                     </span>
                   </p>
+
+                  <select
+                    className="w-full p-2 m-2"
+                    onChange={(e) =>
+                      setInputs({ ...inputs, note: e.target.value })
+                    }
+                  >
+                    <option value="">select note</option>
+                    <option value="first visit">First Visit</option>
+                    <option value="follow up">Follow up</option>
+                  </select>
+
                   <button
+                    disabled={!inputs.note}
                     onClick={() => getAppointed(dr.DoctorName)}
-                    className="w-full cursor-pointer bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 rounded-lg transition-colors shadow-md"
+                    className={`w-full font-semibold py-2 rounded-lg transition-colors shadow-md 
+    ${
+      !inputs.note
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-teal-500 hover:bg-teal-600 text-white cursor-pointer"
+    }
+  `}
                   >
                     Get Appointment
                   </button>

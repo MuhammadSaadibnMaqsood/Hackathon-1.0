@@ -8,10 +8,14 @@ import { toast } from "react-toastify";
 
 
 export async function getAppointedFunc(DoctorName, inputs) {
-  const { date, timing } = inputs;
+  const { date, timing, note } = inputs;
 
   if (!date) {
     toast.error("Enter date first");
+    return { success: false };
+  }
+  if (!note) {
+    toast.error("select note first");
     return { success: false };
   }
 
@@ -40,7 +44,7 @@ export async function getAppointedFunc(DoctorName, inputs) {
     return { success: false };
   }
 
-  await getAppoint(DoctorName, date, timing, user.session.user.email);
+  await getAppoint(DoctorName, date, timing, user.session.user.email,note);
 
   return { success: true };
 }

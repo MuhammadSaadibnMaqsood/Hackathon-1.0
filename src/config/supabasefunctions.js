@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 import { supabaseCl } from "./supabaseClient";
 
-
 export const getDoctor = async () => {
   const { data, error } = await supabaseCl.from("Doctors").select("*");
 
@@ -14,13 +13,14 @@ export const getDoctor = async () => {
   return data;
 };
 
-export const getAppoint = async (doctorName, date, time, email) => {
+export const getAppoint = async (doctorName, date, time, email, note) => {
   try {
     const { data, error } = await supabaseCl.from("Appointments").insert({
       DrName: doctorName,
       time: time,
       Date: date,
       PatientEmail: email,
+      note: note,
     });
     toast.success("Appointment confirm");
   } catch (error) {
@@ -84,10 +84,10 @@ export const getSignup = async (email, password) => {
     password: password,
   });
   if (error) {
-    return {success:false, message: error.message};
+    return { success: false, message: error.message };
   }
 
-  return {success:true,user:data.user}
+  return { success: true, user: data.user };
 };
 export const getLogin = async (email, password) => {
   const { data, error } = await supabaseCl.auth.signInWithPassword({
@@ -99,7 +99,6 @@ export const getLogin = async (email, password) => {
   }
   return { success: true, user: data.user };
 };
-
 
 export const logout = async () => {
   const { error } = await supabaseCl.auth.signOut();
